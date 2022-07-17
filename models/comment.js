@@ -15,7 +15,7 @@ const commentSchema = new Schema(
 commentSchema
 .virtual('url')
 .get(function () {
-  return '/blog/comments' + this._id;
+  return '/blogs/' + this.article._id + '/comments/' + this._id;
 });
 
 // commentSchema
