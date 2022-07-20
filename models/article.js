@@ -5,10 +5,10 @@ const Schema = mongoose.Schema;
 const articleSchema = new Schema(
   {
     title: {type: String, maxlength: 140, required: true},
-    user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+    // user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     date: {type: Date, default: Date.now},
     summary: {type: String, required: true},
-    image: {type: Media, required: true},
+    image: {data: Buffer, contentType: String, fileName: String, fileSize: String},
     content: {type: String, required: true},
     comment: [{type: Schema.Types.ObjectId, ref: 'Comment', required: true}],
   }
@@ -17,7 +17,7 @@ const articleSchema = new Schema(
 articleSchema
 .virtual('url')
 .get(function () {
-  return '/blog/' + this._id;
+  return '/blogs/' + this._id;
 });
 
 // articleSchema
