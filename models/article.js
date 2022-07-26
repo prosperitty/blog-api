@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+const opts = { toJSON: { virtuals: true } };
 const articleSchema = new Schema(
   {
     title: {type: String, maxlength: 140, required: true},
@@ -10,8 +11,8 @@ const articleSchema = new Schema(
     summary: {type: String, required: true},
     image: {data: Buffer, contentType: String, fileName: String, fileSize: String},
     content: {type: String, required: true},
-    comment: [{type: Schema.Types.ObjectId, ref: 'Comment', required: true}],
-  }
+    comments: [{type: Schema.Types.ObjectId, ref: 'Comment', required: true}],
+  }, opts
 );
 
 articleSchema
