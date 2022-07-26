@@ -1,13 +1,42 @@
 const Article = require('../models/article');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
+const article = require('../models/article');
 
 exports.article_list_get = function (req, res, next) {
-  res.json({message: 'GET article list'});
+  Article.find()
+  // .populate('user')
+  .populate('comments')
+  .exec(function(err, list_article) {
+    if (err) {
+      return next(err);
+    }
+    //success
+    res.json({
+      article_list: list_article,
+      error: err,
+    });
+  })
 }
 
 exports.article_get = function (req, res, next) {
-  res.json({message: 'GET article'});
+  Article.findById(req.params.id)
+  .exec(function(err, article) {
+    if (err) {
+      return next(err);
+    }
+    if (article === null) {
+      let err = new Error('article not found');
+      err.status = 404;
+      return next(err);
+    }
+    //success
+    res.json({
+      article: article,
+      error: err,
+    });
+  })
+  // res.json({message: 'GET article'});
 }
 
 exports.article_form_get = function (req, res, next) {
