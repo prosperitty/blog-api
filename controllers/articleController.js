@@ -1,12 +1,11 @@
 const Article = require('../models/article');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
-const article = require('../models/article');
 
 exports.article_list_get = function (req, res, next) {
   Article.find()
   // .populate('user')
-  .populate('comments')
+  // .populate('comments')
   .exec(function(err, list_article) {
     if (err) {
       return next(err);
@@ -20,7 +19,7 @@ exports.article_list_get = function (req, res, next) {
 }
 
 exports.article_get = function (req, res, next) {
-  Article.findById(req.params.id)
+  Article.findById(req.params.articleid)
   .exec(function(err, article) {
     if (err) {
       return next(err);
