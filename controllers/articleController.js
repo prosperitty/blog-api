@@ -1,4 +1,5 @@
 const Article = require('../models/article');
+const Comment = require('../models/comment');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
 
@@ -19,23 +20,35 @@ exports.article_list_get = function (req, res, next) {
 }
 
 exports.article_get = function (req, res, next) {
-  Article.findById(req.params.articleid)
-  .exec(function(err, article) {
-    if (err) {
-      return next(err);
+  async.parallel(
+    {
+      article: function (callback) {
+        Article.findById(req.params.articleid)
+          .populate('comments')
+          .exec(callback);
+      },
+      comments: function (callback) {
+        Comment.find({ article: req.params.articleid })
+          .populate('article')
+          .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      if (results.article === null) {
+        let err = new Error('article not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.json({
+        article: results.article,
+        comments: results.comments,
+        error: err,
+      });
     }
-    if (article === null) {
-      let err = new Error('article not found');
-      err.status = 404;
-      return next(err);
-    }
-    //success
-    res.json({
-      article: article,
-      error: err,
-    });
-  })
-  // res.json({message: 'GET article'});
+  );
 }
 
 exports.article_form_get = function (req, res, next) {
