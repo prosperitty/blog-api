@@ -9,9 +9,9 @@ const upload = multer({ storage: storage });
 /* article routes */
 router.get('/', articleController.article_list_get);
 
-router.post('/create', upload.single("image"), articleController.article_form_post);
-
 router.get('/create', articleController.article_form_get);
+
+router.post('/create', upload.single("image"), articleController.article_form_post);
 
 router.get('/:articleid', articleController.article_get);
 
@@ -22,9 +22,9 @@ router.delete('/:articleid', articleController.article_form_delete);
 //comments routes
 router.get('/:articleid/comments', commentController.comment_list_get);
 
-router.post('/:articleid/comments', commentController.comment_form_post);
-
 router.get('/:articleid/comments/create', commentController.comment_form_get);
+
+router.post('/:articleid/comments/create', commentController.comment_form_post);
 
 router.get('/:articleid/comments/:commentid', commentController.comment_get);
 

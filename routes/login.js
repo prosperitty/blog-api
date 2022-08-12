@@ -1,17 +1,16 @@
 var express = require('express');
 var router = express.Router();
-const bcrypt = require('bcryptjs');
+const userController = require('../controllers/userController');
 const passport = require('passport');
 
-/* GET home page. */
-router.get('/', function (req, res, next) {
-  res.json({
-    message: 'Welcome to the login route',
-  });
-});
+router.get('/', userController.users_login_get);
 
-router.post('/', function (req, res, next) {
-  res.json({ message: 'received login POST' });
-});
+router.post(
+  '/',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+  })
+);
 
 module.exports = router;

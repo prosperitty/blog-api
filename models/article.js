@@ -6,7 +6,7 @@ const opts = { toJSON: { virtuals: true } };
 const articleSchema = new Schema(
   {
     title: {type: String, maxlength: 140, required: true},
-    // user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
+    user: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     date: {type: Date, default: Date.now},
     summary: {type: String, required: true},
     image: {data: Buffer, contentType: String, fileName: String, fileSize: String},
