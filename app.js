@@ -3,12 +3,13 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var cors = require("cors");
+var cors = require('cors');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs');
 const User = require('./models/user');
 
 var indexRouter = require('./routes/index');
@@ -26,13 +27,16 @@ app.use(helmet());
 const mongoDB = process.env.MONGODB_URL;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MONGODB connection error:'))
+db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(cors());
+app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -48,32 +52,70 @@ app.use('/signup', signupRouter);
 passport.use(
   new LocalStrategy((username, password, done) => {
     User.findOne({ username: username }, (err, user) => {
-      if (err) { 
+      if (err) {
         return done(err);
       }
       if (!user) {
-        return done(null, false, { message: "Incorrect username" });
+        return done(null, false, { message: 'Incorrect username' });
       }
       bcrypt.compare(password, user.password, (err, res) => {
         if (res) {
           // passwords match! log user in
-          return done(null, user)
+          return done(null, user);
         } else {
           // passwords do not match!
-          return done(null, false, { message: "Incorrect password" })
+          return done(null, false, { message: 'Incorrect password' });
         }
       });
     });
   })
 );
 
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+// const JWTstrategy = require('passport-jwt').Strategy;
+// const ExtractJWT = require('passport-jwt').ExtractJwt;
+
+// passport.use(
+//   new JWTstrategy(
+//     {
+//       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+//       secretOrKey: process.env.TOKEN_KEY,
+//     },
+//       async function(token, done) {
+//         try {
+//           console.log(token);
+//           return done(null, token.user);
+//         } catch (error) {
+//           done(error);
+//         }
+//       }
+//       //find the user in db if needed. This functionality may be omitted if you store everything you'll need in JWT payload.
+//       // return User.findOneById(jwtPayload.id)
+//       //     .then(user => {
+//       //         return cb(null, user);
+//       //     })
+//       //     .catch(err => {
+//       //         return cb(err);
+//       //     });
+//   )
+// );
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
