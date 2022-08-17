@@ -6,7 +6,7 @@ exports.users_signup_get = function (req, res, next) {
   if (!req.isAuthenticated()) {
     res.json({ title: 'sign up' });
   } else {
-    res.json({isLoggedIn: req.isAuthenticated()});
+    res.json({ isLoggedIn: req.isAuthenticated() });
   }
 };
 
@@ -30,19 +30,20 @@ exports.users_login_get = function (req, res, next) {
   if (!req.isAuthenticated()) {
     res.json({ title: 'log in', user: undefined });
   } else {
-    res.json({isLoggedIn: req.isAuthenticated()})
+    res.json({ isLoggedIn: req.isAuthenticated() });
   }
 };
 
 exports.users_logout_post = function (req, res) {
   req.logout(function (err) {
     if (err) {
+      console.log(err);
       return next(err);
     }
-    res.redirect('/');
+    res.json({ isLoggedIn: req.isAuthenticated(), statusCode: res.statusCode });
   });
 };
 
 exports.users_isLoggedIn = function (req, res, next) {
-  return res.json({isAuthenticated: req.isAuthenticated()});
-}
+  return res.json({ isAuthenticated: req.isAuthenticated() });
+};

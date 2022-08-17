@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const userController = require('../controllers/userController');
-const passport = require('passport');
 
-/* GET user profile. */
 router.get('/profile',function(req, res, next) {
     res.json({message: 'profile route'});
 });
