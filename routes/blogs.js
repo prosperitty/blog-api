@@ -32,4 +32,17 @@ router.put('/:articleid/comments/:commentid', commentController.comment_form_put
 
 router.delete('/:articleid/comments/:commentid', commentController.comment_form_delete);
 
+/* category routes */
+router.get('/category', articleController.article_list_get);
+
+router.get('/category/create', articleController.article_form_get);
+
+router.post('/category/create', upload.single("image"), articleController.article_form_post);
+
+router.get('/category/:categoryid', articleController.article_get);
+
+router.put('/category/:categoryid', articleController.article_form_put);
+
+router.delete('/category/:categoryid', articleController.article_form_delete);
+
 module.exports = router;
