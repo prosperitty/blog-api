@@ -3,29 +3,32 @@ const Article = require('../models/article');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
 
-exports.category_list = function (req, res, next) {
-  res.send('NOT IMPLEMENTED: category LIST');
-};
-
-exports.category_locals = function (req, res, next) {
-  let errors;
-  let category;
-  res.locals.category = category;
-  res.locals.errors = errors;
-  next();
+exports.latest_list = function (req, res, next) {
+  Article.find()
+  .sort({date: -1})
+  .exec(function(err, list_latest) {
+    if (err) {
+      return next(err);
+    }
+    //success
+    res.json({
+      latest_list: list_latest,
+      error: err,
+    });
+  })
+    // { $or: [ { title: "politics" }, { title: "technology"} ] }
 };
 
 //Display detail specific Developer
-exports.category_detail = function (req, res, next) {
-  // res.send('NOT IMPLEMENTED: category detail page')
+exports.category_list = function (req, res, next) {
 
   async.parallel(
     {
       category: function (callback) {
-        Category.findById(req.params.id).exec(callback);
+        Category.findById(req.params.categoryid).exec(callback);
       },
       category_articles: function (callback) {
-        Article.find({ category: req.params.id }, 'title description').exec(callback);
+        Article.find({ category: req.params.categoryid }).exec(callback);
       },
     },
     function (err, results) {
@@ -41,17 +44,18 @@ exports.category_detail = function (req, res, next) {
       res.json({
         title: 'Category Detail',
         category: results.category,
-        category_articles: results.category_articles,
+        category_list: results.category_articles,
+        error: err,
       });
     }
   );
 };
 
-exports.category_create_get = function (req, res) {
+exports.category_form_get = function (req, res) {
   res.json({ title: 'Create New Category' });
 };
 
-exports.category_create_post = [
+exports.category_form_post = [
   // Validate and sanitize the name field.
   body('category', 'Category name required').trim().isLength({ min: 2 }).escape(),
 
@@ -82,7 +86,7 @@ exports.category_create_post = [
 
         if (found_category) {
           // Category exists, redirect to its detail page.
-          res.redirect(found_category.url);
+          res.redirect(category.url);
         } else {
           category.save(function (err) {
             if (err) {
@@ -103,10 +107,10 @@ exports.category_delete_get = function (req, res, next) {
   async.parallel(
     {
       category: function (callback) {
-        Category.findById(req.params.id).exec(callback);
+        Category.findById(req.params.categoryid).exec(callback);
       },
       category_articles: function (callback) {
-        Article.find({ category: req.params.id }).exec(callback);
+        Article.find({ category: req.params.categoryid }).exec(callback);
       },
     },
     function (err, results) {
@@ -162,7 +166,7 @@ exports.category_delete_post = function (req, res, next) {
     }
   );
 
-  // Category.findById(req.params.id).exec(function (err, category) {
+  // Category.findById(req.params.categoryid).exec(function (err, category) {
   //   if (err) {
   //     return next(err);
   //   }
@@ -181,7 +185,7 @@ exports.category_delete_post = function (req, res, next) {
 exports.category_update_get = function (req, res, next) {
   // res.send('NOT IMPLEMENTED: get update category');
 
-  Category.findById(req.params.id).exec(function (err, category) {
+  Category.findById(req.params.categoryid).exec(function (err, category) {
     if (err) {
       return next(err);
     }
@@ -208,7 +212,7 @@ exports.category_update_post = [
 
     // Create a category object with escaped and trimmed data.
     var category = new Category({
-      _id: req.params.id,
+      _id: req.params.categoryid,
       category: req.body.category,
     });
 
@@ -233,7 +237,7 @@ exports.category_update_post = [
           res.redirect(found_category.url);
         } else {
           Category.findByIdAndUpdate(
-            req.params.id,
+            req.params.categoryid,
             category,
             {},
             function (err, thecategory) {
