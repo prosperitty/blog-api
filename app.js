@@ -15,7 +15,7 @@ const User = require('./models/user');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const blogsRouter = require('./routes/blogs');
-const categoriesRouter = require('./routes/categories');
+const categoryRouter = require('./routes/category');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 var compression = require('compression');
@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/blogs', blogsRouter);
-app.use('/categories', categoriesRouter);
+app.use('/category', categoryRouter);
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 
