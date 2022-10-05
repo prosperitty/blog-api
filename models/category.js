@@ -2,22 +2,23 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const CategorySchema = new Schema(
+const opts = { toJSON: { virtuals: true } };
+const categorySchema = new Schema(
   {
-    category: {type: String, required: true, maxlength:100, minlength:2},
-  }
+    category: {type: String, required: true, maxlength:20, minlength:2},
+  }, opts
 )
 
-CategorySchema
+categorySchema
 .virtual('url')
 .get(function () {
-  return '/blogs/category/' + this._id;
+  return '/category/' + this._id;
 });
 
-// CategorySchema
+// categorySchema
 // .virtual('formUrl')
 // .get(function () {
 //   return '/form/genre/' + this._id;
 // });
 
-module.exports = mongoose.model('Category', CategorySchema);
+module.exports = mongoose.model('Category', categorySchema);
