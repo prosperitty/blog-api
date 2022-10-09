@@ -1,5 +1,6 @@
 const Article = require('../models/article');
 const Comment = require('../models/comment');
+const Category = require('../models/category');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
 
@@ -25,6 +26,7 @@ exports.article_get = function (req, res, next) {
       article: function (callback) {
         Article.findById(req.params.articleid)
           .populate('comments')
+          .populate('category')
           .exec(callback);
       },
       comments: function (callback) {
@@ -52,9 +54,18 @@ exports.article_get = function (req, res, next) {
 }
 
 exports.article_form_get = function (req, res, next) {
-  res.json({
-    header: 'create new article'
-  });
+  Category.find()
+  .sort({category: 'ascending'})
+  .exec(function (err, list_categories) {
+    if (err) {
+      return next(err);
+    }
+    //success
+    res.json({
+      header: 'create new article',
+      category_list: list_categories,
+    });
+  })
 }
 
 exports.article_form_post = [
