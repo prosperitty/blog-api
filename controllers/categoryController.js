@@ -101,8 +101,9 @@ exports.category_form_post = [
   },
 ];
 
-exports.category_delete_get = function (req, res, next) {
-  // res.send('NOT IMPLEMENTED: get delete category');
+//SUCCESS. CREATE LOGIC
+exports.category_delete = function (req, res, next) {
+  console.log(`this is a delete request for ${req.params.categoryid}`);
 
   async.parallel(
     {
@@ -111,35 +112,6 @@ exports.category_delete_get = function (req, res, next) {
       },
       category_articles: function (callback) {
         Article.find({ category: req.params.categoryid }).exec(callback);
-      },
-    },
-    function (err, results) {
-      if (err) {
-        return next(err);
-      }
-      if (results.category === null) {
-        res.redirect('/blogs');
-      }
-      //success
-      res.json({
-        title: 'Delete Category',
-        category: results.category,
-        category_articles: results.category_articles,
-      });
-    }
-  );
-};
-
-exports.category_delete_post = function (req, res, next) {
-  // res.send('NOT IMPLEMENTED: post delete category');
-
-  async.parallel(
-    {
-      category: function (callback) {
-        Category.findById(req.body.categoryid).exec(callback);
-      },
-      category_articles: function (callback) {
-        Article.find({ category: req.body.categoryid }).exec(callback);
       },
     },
     function (err, results) {
@@ -155,53 +127,22 @@ exports.category_delete_post = function (req, res, next) {
         });
         return;
       } else {
-        Category.findByIdAndRemove(req.body.categoryid, function (err) {
+        Category.findByIdAndRemove(req.params.categoryid, function (err) {
           if (err) {
             return next(err);
           }
+          console.log(`${req.params.categoryid} successfully deleted`)
           //success
-          res.redirect('/blogs');
+          res.json({
+            statusCode: 'success'
+          });
         });
       }
     }
   );
-
-  // Category.findById(req.params.categoryid).exec(function (err, category) {
-  //   if (err) {
-  //     return next(err);
-  //   }
-
-  //   //success
-  //   Category.findByIdAndRemove(req.body.categoryid, function (err) {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     //success
-  //     res.redirect('/blogs');
-  //   });
-  // });
 };
 
-exports.category_update_get = function (req, res, next) {
-  // res.send('NOT IMPLEMENTED: get update category');
-
-  Category.findById(req.params.categoryid).exec(function (err, category) {
-    if (err) {
-      return next(err);
-    }
-    if (category === null) {
-      let err = new Error('category not found');
-      err.status = 404;
-      return next(err);
-    }
-    res.json({
-      title: 'Update New Category',
-      category: category,
-    });
-  });
-};
-
-exports.category_update_post = [
+exports.category_update = [
   // Validate and sanitize the name field.
   body('category', 'Category name required').trim().isLength({ min: 2 }).escape(),
 
@@ -209,7 +150,6 @@ exports.category_update_post = [
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
-
     // Create a category object with escaped and trimmed data.
     var category = new Category({
       _id: req.params.categoryid,
@@ -218,6 +158,7 @@ exports.category_update_post = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
+      console.log('error occured update again', errors.array())
       res.json({
         title: 'Update Category',
         category: req.body,
@@ -231,11 +172,11 @@ exports.category_update_post = [
         if (err) {
           return next(err);
         }
-
         if (found_category) {
           // Category exists, redirect to its detail page.
           res.redirect(found_category.url);
         } else {
+          console.log('update successful', req.body)
           Category.findByIdAndUpdate(
             req.params.categoryid,
             category,
@@ -245,7 +186,7 @@ exports.category_update_post = [
                 return next(err);
               }
               // Category saved. Redirect to category detail page.
-              res.redirect(thecategory.url);
+              res.json({resp: thecategory.url});
             }
           );
         }

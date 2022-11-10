@@ -12,8 +12,8 @@ router.post('/create', categoryController.category_form_post);
 
 router.get('/:categoryid', categoryController.category_list);
 
-// router.put('/category/:categoryid', categoryController.category_form_put);
+router.put('/:categoryid', categoryController.category_update);
 
-// router.delete('/category/:categoryid', categoryController.category_form_delete);
+router.delete('/:categoryid', categoryController.category_delete);
 
 module.exports = router;
