@@ -16,9 +16,9 @@ router.post('/create', upload.single("image"), articleController.article_form_po
 
 router.get('/:articleid', articleController.article_get);
 
-router.put('/:articleid', articleController.article_form_put);
+router.put('/:articleid', articleController.article_update);
 
-router.delete('/:articleid', articleController.article_form_delete);
+router.delete('/:articleid', articleController.article_delete);
 
 //comments routes
 router.get('/:articleid/comments', commentController.comment_list_get);
