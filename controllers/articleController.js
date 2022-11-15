@@ -77,16 +77,17 @@ exports.article_form_post = [
     .escape(),
   body('content', 'content required')
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
 
   //Process request after validation and sanitization.
   function (req, res, next) {
     const errors = validationResult(req);
 
-    //create new Developer
+    //create new article
     var article = new Article({
+      user: req.user,
       title: req.body.title,
+      category: req.body.category,
       summary: req.body.summary,
       image: {
         data: req.file.buffer,
@@ -117,10 +118,89 @@ exports.article_form_post = [
   },
 ];
 
-exports.article_form_put = function (req,res, next) {
-  res.json({message: 'PUT article form'});
-}
+exports.article_update = [
+  //validation and sanitization.
+  body('title', 'Article title required').trim().isLength({ min: 1 }).escape(),
+  body('summary', 'summary required')
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body('content', 'content required')
+    .trim()
+    .isLength({ min: 1 }),
 
-exports.article_form_delete = function (req,res, next) {
-  res.json({message: 'DELETE article form'});
+  //Process request after validation and sanitization.
+  function (req, res, next) {
+    const errors = validationResult(req);
+
+    var article = new Article({
+      _id: req.params.articleid,
+      user: req.user,
+      title: req.body.title,
+      category: req.body.category,
+      summary: req.body.summary,
+      // image: {
+      //   data: req.file.buffer,
+      //   contentType: req.file.mimetype,
+      //   fileSize: req.file.size,
+      //   fileName: req.file.originalname,
+      // },
+      content: req.body.content,
+    });
+
+    if (!errors.isEmpty()) {
+      Genre.find()
+      .exec(function(err, results) {
+        if (err) {
+          return next(err);
+        }
+        //success
+        res.json({
+          article: req.body,
+          genres: results,
+          errors: errors.array(),
+        });
+      })
+      return;
+    } else {
+      //data is valid
+      Article.findByIdAndUpdate(req.params.id, article, {}, function (err, thearticle) {
+        if (err) {
+          return next(err);
+        }
+        //success
+        res.json({message: 'update successful!'});
+      });
+    }
+  },
+]
+
+exports.article_delete = function (req,res, next) {
+
+  async.parallel(
+    {
+      article: function (callback) {
+        Article.findById(req.params.articleid)
+          .exec(callback);
+      },
+      article_comments: function (callback) {
+        Comment.deleteMany({ article: req.params.articleid })
+        .exec(callback);
+      },
+    },
+    function (err, results) {
+      console.log(results.article_comments)
+      if (err) {
+        return next(err);
+      } else {
+        Article.findByIdAndRemove(req.params.articleid, function (err) {
+          if (err) {
+            return next(err);
+          }
+          console.log('deleted article successfully')
+          res.json({message: `Article deleted ${req.params.articleid}`});
+        });
+      }
+    }
+  );
 }
