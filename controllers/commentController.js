@@ -28,6 +28,7 @@ exports.comment_form_post = [
     //create new Developer
     var comment = new Comment({
       comment: req.body.comment,
+      user: req.user,
       article: req.params.articleid,
     });
 
