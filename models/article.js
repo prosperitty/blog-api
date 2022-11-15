@@ -11,7 +11,7 @@ const articleSchema = new Schema(
     summary: {type: String, required: true},
     image: {data: Buffer, contentType: String, fileName: String, fileSize: String},
     content: {type: String, required: true},
-    category: [{type: Schema.Types.ObjectId, ref: 'Category', required: true}],
+    category: {type: Schema.Types.ObjectId, ref: 'Category', required: true},
     comments: [{type: Schema.Types.ObjectId, ref: 'Comment', required: true}],
   }, opts
 );
