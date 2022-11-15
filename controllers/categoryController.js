@@ -4,19 +4,32 @@ var async = require('async');
 const { body, validationResult } = require('express-validator');
 
 exports.latest_list = function (req, res, next) {
-  Article.find()
-  .sort({date: -1})
-  .exec(function(err, list_latest) {
-    if (err) {
-      return next(err);
+
+  async.parallel(
+    {
+      category_list: function (callback) {
+        Category.find()
+        .sort({category: 'ascending'})
+        .exec(callback);
+      },
+      list_latest: function (callback) {
+        Article.find()
+        .sort({date: -1})
+        .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      //success
+      res.json({
+        category_list: results.category_list,
+        latest_list: results.list_latest,
+        error: err,
+      });
     }
-    //success
-    res.json({
-      latest_list: list_latest,
-      error: err,
-    });
-  })
-    // { $or: [ { title: "politics" }, { title: "technology"} ] }
+  );
 };
 
 //Display detail specific Developer
@@ -104,7 +117,6 @@ exports.category_form_post = [
 //SUCCESS. CREATE LOGIC
 exports.category_delete = function (req, res, next) {
   console.log(`this is a delete request for ${req.params.categoryid}`);
-
   async.parallel(
     {
       category: function (callback) {
@@ -186,7 +198,7 @@ exports.category_update = [
                 return next(err);
               }
               // Category saved. Redirect to category detail page.
-              res.json({resp: thecategory.url});
+              res.json({message: 'update successful!'});
             }
           );
         }
