@@ -5,7 +5,7 @@ var async = require('async');
 const { body, validationResult } = require('express-validator');
 
 exports.article_list_get = function (req, res, next) {
-  Article.find()
+  Article.find({isPublished: true})
   // .populate('user')
   // .populate('comments')
   .exec(function(err, list_article) {
@@ -34,6 +34,11 @@ exports.article_get = function (req, res, next) {
           .populate('article')
           .exec(callback);
       },
+      category_list: function (callback) {
+        Category.find()
+        .sort({category: 'ascending'})
+        .exec(callback);
+      }
     },
     function (err, results) {
       if (err) {
@@ -47,6 +52,7 @@ exports.article_get = function (req, res, next) {
       res.json({
         article: results.article,
         comments: results.comments,
+        category_list: results.category_list,
         error: err,
       });
     }
@@ -96,6 +102,7 @@ exports.article_form_post = [
         fileName: req.file.originalname,
       },
       content: req.body.content,
+      isPublished: req.body.isPublished
     });
 
     if (!errors.isEmpty()) {
@@ -146,25 +153,14 @@ exports.article_update = [
       //   fileName: req.file.originalname,
       // },
       content: req.body.content,
+      isPublished: req.body.isPublished
     });
 
     if (!errors.isEmpty()) {
-      Genre.find()
-      .exec(function(err, results) {
-        if (err) {
-          return next(err);
-        }
-        //success
-        res.json({
-          article: req.body,
-          genres: results,
-          errors: errors.array(),
-        });
-      })
-      return;
+      return next(err);
     } else {
       //data is valid
-      Article.findByIdAndUpdate(req.params.id, article, {}, function (err, thearticle) {
+      Article.findByIdAndUpdate(req.params.articleid, article, {}, function (err, thearticle) {
         if (err) {
           return next(err);
         }
