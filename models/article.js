@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const opts = { toJSON: { virtuals: true } };
+//add published field which takes a boolean value to do unpublished or published posts
 const articleSchema = new Schema(
   {
     title: {type: String, maxlength: 140, required: true},
@@ -13,6 +14,7 @@ const articleSchema = new Schema(
     content: {type: String, required: true},
     category: {type: Schema.Types.ObjectId, ref: 'Category', required: true},
     comments: [{type: Schema.Types.ObjectId, ref: 'Comment', required: true}],
+    isPublished: {type: Boolean, required: true}
   }, opts
 );
 
