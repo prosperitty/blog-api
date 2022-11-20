@@ -13,7 +13,7 @@ exports.latest_list = function (req, res, next) {
         .exec(callback);
       },
       list_latest: function (callback) {
-        Article.find()
+        Article.find({isPublished: true})
         .sort({date: -1})
         .exec(callback);
       },
@@ -41,7 +41,7 @@ exports.category_list = function (req, res, next) {
         Category.findById(req.params.categoryid).exec(callback);
       },
       category_articles: function (callback) {
-        Article.find({ category: req.params.categoryid }).exec(callback);
+        Article.find({ category: req.params.categoryid, isPublished: true }).exec(callback);
       },
     },
     function (err, results) {
