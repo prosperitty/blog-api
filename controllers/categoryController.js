@@ -32,7 +32,6 @@ exports.latest_list = function (req, res, next) {
   );
 };
 
-//Display detail specific Developer
 exports.category_list = function (req, res, next) {
 
   async.parallel(
