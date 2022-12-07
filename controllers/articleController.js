@@ -3,10 +3,12 @@ const Comment = require('../models/comment');
 const Category = require('../models/category');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
+const article = require('../models/article');
 
 exports.article_list_get = function (req, res, next) {
   Article.find({isPublished: true})
-  // .populate('user')
+  .sort({date: -1})
+  .populate('user')
   // .populate('comments')
   .exec(function(err, list_article) {
     if (err) {
@@ -26,12 +28,14 @@ exports.article_get = function (req, res, next) {
       article: function (callback) {
         Article.findById(req.params.articleid)
           .populate('comments')
+          .populate('user')
           .populate('category')
           .exec(callback);
       },
       comments: function (callback) {
         Comment.find({ article: req.params.articleid })
           .populate('article')
+          .populate('user')
           .exec(callback);
       },
       category_list: function (callback) {
@@ -49,8 +53,13 @@ exports.article_get = function (req, res, next) {
         err.status = 404;
         return next(err);
       }
+      console.log(req.isAuthenticated(),'authentication')
+      console.log(req.session.passport)
+      // console.log(results.article.user, 'article user')
+      // console.log(req.user == results.article.user._id, 'signed in user is author of article');
       res.json({
         article: results.article,
+        user: req.user,
         comments: results.comments,
         category_list: results.category_list,
         error: err,
@@ -79,8 +88,7 @@ exports.article_form_post = [
   body('title', 'Article title required').trim().isLength({ min: 1 }).escape(),
   body('summary', 'summary required')
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
   body('content', 'content required')
     .trim()
     .isLength({ min: 1 }),
@@ -130,8 +138,7 @@ exports.article_update = [
   body('title', 'Article title required').trim().isLength({ min: 1 }).escape(),
   body('summary', 'summary required')
     .trim()
-    .isLength({ min: 1 })
-    .escape(),
+    .isLength({ min: 1 }),
   body('content', 'content required')
     .trim()
     .isLength({ min: 1 }),
