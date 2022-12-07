@@ -3,7 +3,6 @@ const Comment = require('../models/comment');
 const Category = require('../models/category');
 var async = require('async');
 const { body, validationResult } = require('express-validator');
-const article = require('../models/article');
 
 exports.article_list_get = function (req, res, next) {
   Article.find({isPublished: true})
@@ -53,10 +52,6 @@ exports.article_get = function (req, res, next) {
         err.status = 404;
         return next(err);
       }
-      console.log(req.isAuthenticated(),'authentication')
-      console.log(req.session.passport)
-      // console.log(results.article.user, 'article user')
-      // console.log(req.user == results.article.user._id, 'signed in user is author of article');
       res.json({
         article: results.article,
         user: req.user,
