@@ -40,7 +40,9 @@ exports.category_list = function (req, res, next) {
         Category.findById(req.params.categoryid).exec(callback);
       },
       category_articles: function (callback) {
-        Article.find({ category: req.params.categoryid, isPublished: true }).exec(callback);
+        Article.find({ category: req.params.categoryid, isPublished: true })
+        .populate('user')
+        .exec(callback);
       },
     },
     function (err, results) {
