@@ -24,6 +24,17 @@ articleSchema
   return '/blogs/' + this._id;
 });
 
+articleSchema
+.virtual('date_formatted')
+.get(function () {
+  const options = {
+    year: "numeric",
+    month: "long", 
+    day: "numeric",
+  }
+  return this.date.toLocaleDateString("en-US", options);
+});
+
 // articleSchema
 // .virtual('formUrl')
 // .get(function () {
