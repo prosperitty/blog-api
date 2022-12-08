@@ -25,7 +25,7 @@ require('dotenv').config();
 var app = express();
 app.use(helmet());
 
-const mongoDB = process.env.MONGODB_URL;
+const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MONGODB connection error:'));
