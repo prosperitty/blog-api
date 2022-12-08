@@ -19,11 +19,11 @@ const categoryRouter = require('./routes/category');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 var compression = require('compression');
-// var helmet = require('helmet');
+var helmet = require('helmet');
 
 require('dotenv').config();
 var app = express();
-// app.use(helmet());
+app.use(helmet());
 
 const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
@@ -34,7 +34,7 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors());
+app.use(cors({ origin: "https://eventhorizon.up.railway.app/", credentials: true}));
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
