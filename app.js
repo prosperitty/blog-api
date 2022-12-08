@@ -34,7 +34,7 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors({ origin: "https://eventhorizon.up.railway.app/", credentials: true}));
+app.use(cors());
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
