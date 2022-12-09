@@ -34,8 +34,8 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(cors());
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
+app.use(cors({ origin: "http://localhost:3000/", credentials: true}));
+app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
