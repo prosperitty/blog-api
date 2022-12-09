@@ -19,11 +19,11 @@ const categoryRouter = require('./routes/category');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 var compression = require('compression');
-var helmet = require('helmet');
+// var helmet = require('helmet');
 
 require('dotenv').config();
 var app = express();
-app.use(helmet());
+// app.use(helmet());
 
 const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
