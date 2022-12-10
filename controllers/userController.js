@@ -28,14 +28,14 @@ exports.users_signup_post = function (req, res, next) {
           }
           if (found_username) {
             // username exists, redirect to signup page.
-            res.redirect('/signup');
+            res.redirect('https://alex-lvl.github.io/blog-react/signup');
           } else {
             user.save(function (err) {
               if (err) {
                 return next(err);
               }
               // user saved. Redirect to login.
-              res.redirect('/login');
+              res.redirect('https://alex-lvl.github.io/blog-react/login');
             });
           }
         })

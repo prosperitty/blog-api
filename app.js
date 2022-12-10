@@ -19,11 +19,11 @@ const categoryRouter = require('./routes/category');
 const loginRouter = require('./routes/login');
 const signupRouter = require('./routes/signup');
 var compression = require('compression');
-// var helmet = require('helmet');
+var helmet = require('helmet');
 
 require('dotenv').config();
 var app = express();
-// app.use(helmet());
+app.use(helmet());
 
 const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
@@ -34,6 +34,7 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+//setting origin to exact route may cause problems. request headers dont send exact origin route.
 app.use(cors({ origin: "https://alex-lvl.github.io", credentials: true}));
 app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
