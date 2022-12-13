@@ -7,6 +7,7 @@ var cors = require('cors');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
@@ -28,6 +29,10 @@ app.use(helmet());
 const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: 'sessions'
+});
 db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 
 // view engine setup
@@ -36,7 +41,7 @@ app.set('view engine', 'ejs');
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
 app.use(cors({ origin: ["https://alex-lvl.github.io", "https://alex-lvl.github.io/blogs"], credentials: true}));
-app.use(session({ secret: "secret", resave: false, saveUninitialized: true }));
+app.use(session({ store, secret: "secret", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
