@@ -62,5 +62,6 @@ exports.users_logout_post = function (req, res) {
 };
 
 exports.users_isLoggedIn = function (req, res, next) {
+  console.log(req.isAuthenticated(),'logged in?');
   return res.json({ isAuthenticated: req.isAuthenticated() });
 };
