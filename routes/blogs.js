@@ -5,10 +5,11 @@ const commentController = require('../controllers/commentController');
 const multer  = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+var cors = require('cors');
 
 // article routes
 
-router.get('/', articleController.article_list_get);
+router.get('/', cors({ origin: "https://alex-lvl.github.io", credentials: true}),articleController.article_list_get);
 
 router.get('/create', articleController.article_form_get);
 
