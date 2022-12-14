@@ -9,7 +9,7 @@ router.get('/', userController.users_login_get);
 router.post(
   '/',
   passport.authenticate('local', {
-    successRedirect: 'https://alex-lvl.github.io/blog-react/',
+    successRedirect: 'https://alex-lvl.github.io/blog-react/login',
     failureRedirect: 'https://alex-lvl.github.io/blog-react/login',
   })
 );
