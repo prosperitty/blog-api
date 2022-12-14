@@ -36,6 +36,8 @@ exports.category_list = function (req, res, next) {
       category_articles: function (callback) {
         Article.find({ category: req.params.categoryid, isPublished: true })
         .populate('user')
+        .limit(6)
+        .sort({date: -1})
         .exec(callback);
       },
     },
