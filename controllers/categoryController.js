@@ -11,12 +11,7 @@ exports.latest_list = function (req, res, next) {
         Category.find()
         .sort({category: 'ascending'})
         .exec(callback);
-      },
-      list_latest: function (callback) {
-        Article.find({isPublished: true})
-        .sort({date: -1})
-        .exec(callback);
-      },
+      }
     },
     function (err, results) {
       if (err) {
@@ -25,7 +20,6 @@ exports.latest_list = function (req, res, next) {
       //success
       res.json({
         category_list: results.category_list,
-        latest_list: results.list_latest,
         error: err,
       });
     }
