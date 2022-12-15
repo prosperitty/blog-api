@@ -47,6 +47,7 @@ app.use(
     secret: process.env.TOKEN_KEY,
     resave: false,
     saveUninitialized: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7, // One week
     cookie: {
       sameSite: 'None',
     },
