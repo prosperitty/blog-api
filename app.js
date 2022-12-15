@@ -31,7 +31,7 @@ mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
-  collection: 'sessions'
+  collection: 'sessions',
 });
 db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 
@@ -40,8 +40,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
-app.use(cors({ origin: "https://alex-lvl.github.io", credentials: true}));
-app.use(session({ store, secret: "secret", resave: false, saveUninitialized: true }));
+app.use(cors({ origin: 'https://alex-lvl.github.io', credentials: true }));
+app.use(
+  session({
+    store,
+    secret: process.env.TOKEN_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      sameSite: 'None',
+    },
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
@@ -80,12 +90,12 @@ passport.use(
   })
 );
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+passport.deserializeUser(function (id, done) {
+  User.findById(id, function (err, user) {
     done(err, user);
   });
 });
