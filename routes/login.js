@@ -11,8 +11,8 @@ router.post(
   '/',
   passport.authenticate('local', {
     scope: ['username', 'password'],
-    successRedirect: '/',
-    failureRedirect: '/login',
+    successRedirect: '"https://alex-lvl.github.io"/',
+    failureRedirect: '"https://alex-lvl.github.io"/login',
   })
 );
 
