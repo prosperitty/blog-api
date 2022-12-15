@@ -91,10 +91,12 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
+  console.log('serializing user:', user);
   done(null, user.id);
 });
 
 passport.deserializeUser(function (id, done) {
+  console.log('deserializing user with id:', id);
   User.findById(id, function (err, user) {
     done(err, user);
   });
