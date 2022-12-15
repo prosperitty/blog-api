@@ -6,11 +6,13 @@ const passport = require('passport');
 router.get('/', userController.users_login_get);
 
 //redirect to client side route
+//check the login route on client side to see why it reroutes to server side route and try scope option
 router.post(
   '/',
   passport.authenticate('local', {
-    successRedirect: 'https://alex-lvl.github.io/blog-react/login',
-    failureRedirect: 'https://alex-lvl.github.io/blog-react/login',
+    scope: ['username', 'password'],
+    successRedirect: '/',
+    failureRedirect: '/login',
   })
 );
 
