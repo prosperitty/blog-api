@@ -44,10 +44,12 @@ exports.users_signup_post = function (req, res, next) {
 };
 
 exports.users_login_get = function (req, res, next) {
-  if (!req.isAuthenticated()) {
-    res.json({ title: 'log in', user: undefined });
-  } else {
+  if (req.isAuthenticated()) {
+    console.log('is auth get req')
     res.json({ isLoggedIn: req.isAuthenticated() });
+  } else {
+    console.log('not auth get req', )
+    res.json({ title: 'log in', user: undefined });
   }
 };
 
