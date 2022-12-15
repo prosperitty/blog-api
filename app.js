@@ -50,6 +50,7 @@ app.use(
     maxAge: 1000 * 60 * 60 * 24 * 7, // One week
     cookie: {
       sameSite: 'None',
+      maxAge: 1000 * 60 * 60 * 24 * 7, // One week
     },
   })
 );
