@@ -9,7 +9,7 @@ var cors = require('cors');
 
 // article routes
 
-router.get('/', cors({ origin: "https://alex-lvl.github.io", credentials: true}),articleController.article_list_get);
+router.get('/',articleController.article_list_get);
 
 router.get('/create', articleController.article_form_get);
 
