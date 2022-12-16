@@ -51,8 +51,9 @@ app.use(
     maxAge: 1000 * 60 * 60 * 24, // One day
     cookie: {
       sameSite: 'None',
-      domain: 'https://alex-lvl.github.io',
+      domain: 'alex-lvl.github.io',
       maxAge: 1000 * 60 * 60 * 24, // One day
+      secure: true,
     },
   })
 );
