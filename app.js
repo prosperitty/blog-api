@@ -32,6 +32,7 @@ const db = mongoose.connection;
 const store = new MongoDBStore({
   uri: process.env.MONGODB_URI,
   collection: 'sessions',
+  autoRemove: true,
 });
 db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 
@@ -47,10 +48,11 @@ app.use(
     secret: process.env.TOKEN_KEY,
     resave: false,
     saveUninitialized: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7, // One week
+    maxAge: 1000 * 60 * 60 * 24, // One day
     cookie: {
       sameSite: 'None',
-      maxAge: 1000 * 60 * 60 * 24 * 7, // One week
+      domain: 'https://alex-lvl.github.io',
+      maxAge: 1000 * 60 * 60 * 24, // One day
     },
   })
 );
