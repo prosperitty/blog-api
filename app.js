@@ -52,7 +52,7 @@ app.use(
     maxAge: 1000 * 60 * 60 * 24, // One day
     cookie: {
       sameSite: 'None',
-      domain: 'alex-lvl.github.io',
+      domain: 'eventhorizon.up.railway.app',
       maxAge: 1000 * 60 * 60 * 24, // One day
       secure: true,
     },
