@@ -60,6 +60,7 @@ router.post(
             console.log(err, 'login user error')
             return next(err);
            }
+           console.log('successful login')
           return res.redirect("https://alex-lvl.github.io/blog-react");
         });
       })(req, res, next);
