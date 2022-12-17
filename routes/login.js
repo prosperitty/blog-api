@@ -66,7 +66,7 @@ router.post(
             httpOnly: true,
             domain: 'alex-lvl.github.io',
             path: '/',
-            sameSite: 'none'
+            sameSite: false,
           });
            console.log('successful login')
            console.log(user);
