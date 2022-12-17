@@ -64,7 +64,7 @@ router.post(
             maxAge: 86400000, // 1 day in milliseconds
             secure: true,
             httpOnly: true,
-            domain: 'eventhorizon.up.railway.app',
+            domain: 'alex-lvl.github.io',
             path: '/',
             sameSite: 'none'
           });
