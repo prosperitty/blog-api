@@ -60,14 +60,14 @@ router.post(
             console.log(err, 'login user error')
             return next(err);
            }
-          //  res.cookie('session', req.sessionID, {
-          //   maxAge: 86400000, // 1 day in milliseconds
-          //   secure: true,
-          //   httpOnly: true,
-          //   domain: 'alex-lvl.github.io',
-          //   path: '/',
-          //   sameSite: 'none'
-          // });
+           res.cookie('session', req.sessionID, {
+            maxAge: 86400000, // 1 day in milliseconds
+            secure: true,
+            httpOnly: true,
+            domain: 'eventhorizon.up.railway.app',
+            path: '/',
+            sameSite: 'none'
+          });
            console.log('successful login')
            console.log(user);
           return res.redirect("https://alex-lvl.github.io/blog-react");
