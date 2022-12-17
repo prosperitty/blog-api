@@ -44,10 +44,10 @@ app.set('view engine', 'ejs');
 app.use(cors({ origin: 'https://alex-lvl.github.io', credentials: true }));
 app.use(
   session({
-    store,
+    store: store,
     secret: process.env.TOKEN_KEY,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     maxAge: 1000 * 60 * 60 * 24, // One day
     cookie: {
       sameSite: 'None',
