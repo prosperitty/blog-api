@@ -42,6 +42,7 @@ app.set('view engine', 'ejs');
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
 app.use(cors({ origin: 'https://alex-lvl.github.io', credentials: true }));
+app.use(cookieParser());
 app.use(
   session({
     store: store,
@@ -57,7 +58,6 @@ app.use(
     },
   })
 );
-app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(logger('dev'));
