@@ -4,7 +4,7 @@ require('dotenv').config();
 
 exports.users_signup_get = function (req, res, next) {
   if (!req.isAuthenticated()) {
-    res.json({ title: 'sign up' });
+    res.json({ title: 'sign up', isValid: false });
   } else {
     res.json({ isLoggedIn: req.isAuthenticated() });
   }
@@ -28,14 +28,22 @@ exports.users_signup_post = function (req, res, next) {
           }
           if (found_username) {
             // username exists, redirect to signup page.
-            res.redirect('https://alex-lvl.github.io/blog-react/signup');
+            res.json({
+              message: 'username is taken. try another username',
+              isValid: false,
+            })
+            // res.redirect('https://alex-lvl.github.io/blog-react/signup');
           } else {
             user.save(function (err) {
               if (err) {
                 return next(err);
               }
               // user saved. Redirect to login.
-              res.redirect('https://alex-lvl.github.io/blog-react/login');
+              res.json({
+                message: 'success!',
+                isValid: true,
+              })
+              // res.redirect('https://alex-lvl.github.io/blog-react/login');
             });
           }
         })
