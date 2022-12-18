@@ -39,6 +39,7 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'ejs');
+//unknown if this solved the issue with session cookie not being set
 app.set("trust proxy", 1);
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
@@ -51,6 +52,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
+      //must be set if requesting from backend api
       sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24, // One day
       secure: true,
