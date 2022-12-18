@@ -43,37 +43,10 @@ router.get('/', userController.users_login_get);
 
 router.post(
   '/',
-  function(req, res, next) {
-      passport.authenticate('local', function(err, user, info) {
-        if (err) { 
-          console.log(err);
-          return next(err);
-         }
-        if (!user) {
-          console.log(info.message);
-          // Display an error message to the user
-          req.flash('error', info.message);
-          return res.redirect("https://alex-lvl.github.io/blog-react/login");
-        }
-        req.logIn(user, function(err) {
-          if (err) { 
-            console.log(err, 'login user error')
-            return next(err);
-           }
-           res.cookie('session', req.sessionID, {
-            maxAge: 86400000, // 1 day in milliseconds
-            secure: true,
-            httpOnly: true,
-            domain: 'eventhorizon.up.railway.app',
-            path: '/',
-            sameSite: false,
-          });
-           console.log('successful login')
-           console.log(user);
-          return res.redirect("https://alex-lvl.github.io/blog-react");
-        });
-      })(req, res, next);
-    }
+  passport.authenticate('local', {
+    successRedirect: "https://alex-lvl.github.io/blog-react/",
+    failureRedirect: "https://alex-lvl.github.io/blog-react/"
+  })
 );
 
 module.exports = router;
