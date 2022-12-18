@@ -39,7 +39,6 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'ejs');
-app.set("trust proxy", 1); 
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
 app.use(cors({ origin: 'https://alex-lvl.github.io', credentials: true }));
@@ -52,6 +51,7 @@ app.use(
     saveUninitialized: false,
     maxAge: 1000 * 60 * 60 * 24, // One day
     cookie: {
+      sameSite: 'none',
       maxAge: 1000 * 60 * 60 * 24, // One day
       secure: true,
     },
