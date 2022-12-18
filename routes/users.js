@@ -12,6 +12,7 @@ router.get('/profile', function (req, res, next) {
           .select('-image')
           .populate('comments')
           .populate('category')
+          .populate('user')
           .exec(callback);
       },
       unpublished_articles: function (callback) {
@@ -19,6 +20,7 @@ router.get('/profile', function (req, res, next) {
           .select('-image')
           .populate('comments')
           .populate('category')
+          .populate('user')
           .exec(callback);
       },
     },
