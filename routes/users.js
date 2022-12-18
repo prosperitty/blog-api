@@ -9,12 +9,14 @@ router.get('/profile', function (req, res, next) {
     {
       published_articles: function (callback) {
         Article.find({ user: req.user._id, isPublished: true })
+          .select('-image')
           .populate('comments')
           .populate('category')
           .exec(callback);
       },
       unpublished_articles: function (callback) {
         Article.find({ user: req.user._id, isPublished: false })
+          .select('-image')
           .populate('comments')
           .populate('category')
           .exec(callback);
