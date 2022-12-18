@@ -46,7 +46,7 @@ exports.users_signup_post = function (req, res, next) {
 exports.users_login_get = function (req, res, next) {
   if (!req.isAuthenticated()) {
     console.log('not auth get req', )
-    res.json({ title: 'log in'});
+    res.json({ title: 'log in', isLoggedIn: false});
   } else {
     console.log('is auth get req')
     res.json({ isLoggedIn: req.isAuthenticated() });
