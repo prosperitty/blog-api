@@ -109,6 +109,8 @@ passport.deserializeUser(function (id, done) {
   });
 });
 
+//set authorization header for fetch requests to allow jwt
+
 // const JWTstrategy = require('passport-jwt').Strategy;
 // const ExtractJWT = require('passport-jwt').ExtractJwt;
 

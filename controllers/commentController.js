@@ -46,7 +46,10 @@ exports.comment_form_post = [
         }
         //success
         console.log('New Comment ' + comment);
-        res.redirect('/blogs/' + comment.article._id);
+        res.json({
+          success: true,
+        })
+        // res.redirect('/blogs/' + comment.article._id);
       });
     }
   },
