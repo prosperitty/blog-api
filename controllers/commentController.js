@@ -35,6 +35,7 @@ exports.comment_form_post = [
     if (!errors.isEmpty()) {
       res.json({
         comment: comment,
+        isValid: false,
         errors: errors.array(),
       });
       return;
@@ -47,7 +48,7 @@ exports.comment_form_post = [
         //success
         console.log('New Comment ' + comment);
         res.json({
-          success: true,
+          isValid: true
         })
         // res.redirect('/blogs/' + comment.article._id);
       });
