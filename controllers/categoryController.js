@@ -96,14 +96,19 @@ exports.category_form_post = [
 
         if (found_category) {
           // Category exists, redirect to its detail page.
-          res.redirect(category.url);
+          res.json({
+            message: "category already exists. try another category.",
+            isValid: false,
+          });
         } else {
           category.save(function (err) {
             if (err) {
               return next(err);
             }
             // Category saved. Redirect to category detail page.
-            res.redirect(category.url);
+            res.json({
+              isValid: true
+            });
           });
         }
       });
