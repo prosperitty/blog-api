@@ -24,7 +24,7 @@ router.get('/', function (req, res, next) {
           // Get a random entry
           var random = Math.floor(Math.random() * count)
           // Again query all users but only fetch one offset by our random #
-          Article.findOne().skip(random).populate('user').populate('category').exec(callback)
+          Article.findOne({isPublished: true}).skip(random).populate('user').populate('category').exec(callback)
         })
     },
     //bug after this query. get _id for categories instead of string

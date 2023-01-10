@@ -5,7 +5,6 @@ const commentController = require('../controllers/commentController');
 const multer  = require('multer')
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-var cors = require('cors');
 
 // article routes
 
