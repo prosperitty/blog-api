@@ -30,26 +30,31 @@ router.get('/', function (req, res, next) {
     //bug after this query. get _id for categories instead of string
     businessArticle: function(callback) {
       Article.findOne({category: '63433c0bf956b9ec2934ecdc', isPublished: true})
+      .select('-image')
       .populate('category')
       .exec(callback)
     },
     politicsArticle: function(callback) {
       Article.findOne({category: '633d2bd499336cb4c9381d17', isPublished: true})
+      .select('-image')
       .populate('category')
       .exec(callback)
     },
     scienceArticle: function(callback) {
       Article.findOne({category: '63433c35f956b9ec2934ecf8', isPublished: true})
+      .select('-image')
       .populate('category')
       .exec(callback)
     },
     healthArticle: function(callback) {
       Article.findOne({category: '63433c39f956b9ec2934ed06', isPublished: true})
+      .select('-image')
       .populate('category')
       .exec(callback)
     },
     technologyArticle: function(callback) {
       Article.findOne({category: '63433c30f956b9ec2934ecea', isPublished: true})
+      .select('-image')
       .populate('category')
       .exec(callback)
     },
