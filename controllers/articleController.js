@@ -112,6 +112,7 @@ exports.article_form_post = [
     if (!errors.isEmpty()) {
       res.json({
         article: article,
+        isValid: false,
         errors: errors.array(),
       });
       return;
@@ -123,7 +124,11 @@ exports.article_form_post = [
         }
         //success
         console.log('New Article ' + article);
-        res.redirect('/blogs');
+        res.json({
+          isValid: true,
+          article: false,
+          blogURL: article.url,
+        });
       });
     }
   },
