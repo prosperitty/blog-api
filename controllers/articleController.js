@@ -6,7 +6,8 @@ const { body, validationResult } = require('express-validator');
 
 exports.article_list_get = function (req, res, next) {
   Article.find({isPublished: true})
-  .limit(6)
+  .select('-image')
+  .limit(60)
   .sort({date: -1})
   .populate('user')
   // .populate('comments')
