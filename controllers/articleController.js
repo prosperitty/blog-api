@@ -26,6 +26,7 @@ exports.article_list_get = function (req, res, next) {
       latest_article: function (callback) {
         Article.findOne({isPublished: true})
         .populate('user')
+        .sort({date: -1})
         .exec(callback)
       },
       list_article: function (callback) {
