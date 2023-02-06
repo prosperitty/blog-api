@@ -5,21 +5,50 @@ var async = require('async');
 const { body, validationResult } = require('express-validator');
 
 exports.article_list_get = function (req, res, next) {
-  Article.find({isPublished: true})
-  .limit(6)
-  .sort({date: -1})
-  .populate('user')
-  // .populate('comments')
-  .exec(function(err, list_article) {
-    if (err) {
-      return next(err);
+  // Article.find({isPublished: true})
+  // .limit(6)
+  // .sort({date: -1})
+  // .populate('user')
+  // // .populate('comments')
+  // .exec(function(err, list_article) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   //success
+  //   res.json({
+  //     article_list: list_article,
+  //     error: err,
+  //   });
+  // })
+
+  async.parallel(
+    {
+      latest_article: function (callback) {
+        Article.findOne({isPublished: true})
+        .populate('user')
+        .exec(callback)
+      },
+      list_article: function (callback) {
+        Article.find({isPublished: true })
+        .populate('user')
+        .select('-image')
+        .limit(60)
+        .sort({date: -1})
+        .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      //success
+      res.json({
+        latest_article: results.latest_article,
+        article_list: results.list_article,
+        error: err,
+      });
     }
-    //success
-    res.json({
-      article_list: list_article,
-      error: err,
-    });
-  })
+  );
 }
 
 exports.article_get = function (req, res, next) {

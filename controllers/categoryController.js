@@ -33,10 +33,17 @@ exports.category_list = function (req, res, next) {
       category: function (callback) {
         Category.findById(req.params.categoryid).exec(callback);
       },
+      latest_article: function (callback) {
+        Article.findOne({category: req.params.categoryid, isPublished: true})
+        .populate('category')
+        .populate('user')
+        .exec(callback)
+      },
       category_articles: function (callback) {
         Article.find({ category: req.params.categoryid, isPublished: true })
         .populate('user')
-        .limit(6)
+        .select('-image')
+        .limit(60)
         .sort({date: -1})
         .exec(callback);
       },
@@ -54,6 +61,7 @@ exports.category_list = function (req, res, next) {
       res.json({
         title: 'Category Detail',
         category: results.category,
+        latest_article: results.latest_article,
         category_list: results.category_articles,
         error: err,
       });
