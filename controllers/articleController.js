@@ -181,6 +181,7 @@ exports.article_update = [
     var article = new Article({
       _id: req.params.articleid,
       user: req.user,
+      date: req.body.date,
       title: req.body.title,
       category: req.body.category,
       summary: req.body.summary,
