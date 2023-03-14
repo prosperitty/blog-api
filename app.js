@@ -43,7 +43,7 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 app.set("trust proxy", 1);
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
-app.use(cors({ origin: 'https://alex-lvl.github.io', credentials: true }));
+app.use(cors({ origin: ['https://alex-lvl.github.io', "https://nextjs-blog-one-pi-24.vercel.app/"], credentials: true }));
 app.use(cookieParser());
 app.use(
   session({
