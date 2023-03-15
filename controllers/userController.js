@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Article = require('../models/article');
+var async = require('async');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
@@ -75,3 +77,60 @@ exports.users_isLoggedIn = function (req, res, next) {
   console.log(req.isAuthenticated(),'logged in?');
   return res.json({ isAuthenticated: req.isAuthenticated() });
 };
+
+exports.users_posts = function (req, res, next) {
+  Article.find({ user: req.params.userid, isPublished: true })
+  .select('-image')
+  .select('-comments')
+  .populate('category')
+  .populate('user', 'firstName lastName')
+  .sort({date: -1})
+  .exec(function (err, results) {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    res.json({
+      user_posts: results,
+      error: err,
+    });
+  });
+};
+
+exports.users_profile = function (req, res, next) {
+  async.parallel(
+    {
+      published_articles: function (callback) {
+        Article.find({ user: req.user._id, isPublished: true })
+          .select('-image')
+          .populate('comments')
+          .populate('category')
+          .populate('user')
+          .exec(callback);
+      },
+      unpublished_articles: function (callback) {
+        Article.find({ user: req.user._id, isPublished: false })
+          .select('-image')
+          .populate('comments')
+          .populate('category')
+          .populate('user')
+          .exec(callback);
+      },
+    },
+    function (err, results) {
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      console.log(req.user);
+      res.json({
+        unpublished_articles: results.unpublished_articles,
+        published_articles: results.published_articles,
+        user: req.user,
+        error: err,
+      });
+    }
+  );
+};
+
+
