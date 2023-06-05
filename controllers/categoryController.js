@@ -4,14 +4,11 @@ var async = require('async');
 const { body, validationResult } = require('express-validator');
 
 exports.latest_list = function (req, res, next) {
-
   async.parallel(
     {
       category_list: function (callback) {
-        Category.find()
-        .sort({category: 'ascending'})
-        .exec(callback);
-      }
+        Category.find().sort({ category: 'ascending' }).exec(callback);
+      },
     },
     function (err, results) {
       if (err) {
@@ -27,26 +24,24 @@ exports.latest_list = function (req, res, next) {
 };
 
 exports.category_list = function (req, res, next) {
-
   async.parallel(
     {
       category: function (callback) {
         Category.findById(req.params.categoryid).exec(callback);
       },
       latest_article: function (callback) {
-        Article.findOne({category: req.params.categoryid, isPublished: true})
-        .populate('category')
-        .populate('user')
-        .sort({date: -1})
-        .exec(callback)
+        Article.findOne({ category: req.params.categoryid, isPublished: true })
+          .populate('category')
+          .populate('user')
+          .sort({ date: -1 })
+          .exec(callback);
       },
       category_articles: function (callback) {
         Article.find({ category: req.params.categoryid, isPublished: true })
-        .populate('user')
-        .select('-image')
-        .limit(60)
-        .sort({date: -1})
-        .exec(callback);
+          .populate('user')
+          .limit(60)
+          .sort({ date: -1 })
+          .exec(callback);
       },
     },
     function (err, results) {
@@ -76,7 +71,10 @@ exports.category_form_get = function (req, res) {
 
 exports.category_form_post = [
   // Validate and sanitize the name field.
-  body('category', 'Category name required').trim().isLength({ min: 2 }).escape(),
+  body('category', 'Category name required')
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -98,7 +96,10 @@ exports.category_form_post = [
     } else {
       // Data from form is valid.
       // Check if Category with same name already exists.
-      Category.findOne({ category: req.body.category }).exec(function (err, found_category) {
+      Category.findOne({ category: req.body.category }).exec(function (
+        err,
+        found_category
+      ) {
         if (err) {
           return next(err);
         }
@@ -106,7 +107,7 @@ exports.category_form_post = [
         if (found_category) {
           // Category exists, redirect to its detail page.
           res.json({
-            message: "category already exists. try another category.",
+            message: 'category already exists. try another category.',
             isValid: false,
           });
         } else {
@@ -116,7 +117,7 @@ exports.category_form_post = [
             }
             // Category saved. Redirect to category detail page.
             res.json({
-              isValid: true
+              isValid: true,
             });
           });
         }
@@ -154,10 +155,10 @@ exports.category_delete = function (req, res, next) {
           if (err) {
             return next(err);
           }
-          console.log(`${req.params.categoryid} successfully deleted`)
+          console.log(`${req.params.categoryid} successfully deleted`);
           //success
           res.json({
-            statusCode: 'success'
+            statusCode: 'success',
           });
         });
       }
@@ -167,7 +168,10 @@ exports.category_delete = function (req, res, next) {
 
 exports.category_update = [
   // Validate and sanitize the name field.
-  body('category', 'Category name required').trim().isLength({ min: 2 }).escape(),
+  body('category', 'Category name required')
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
 
   // Process request after validation and sanitization.
   (req, res, next) => {
@@ -181,7 +185,7 @@ exports.category_update = [
 
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values/error messages.
-      console.log('error occured update again', errors.array())
+      console.log('error occured update again', errors.array());
       res.json({
         title: 'Update Category',
         category: req.body,
@@ -191,7 +195,10 @@ exports.category_update = [
     } else {
       // Data from form is valid.
       // Check if Category with same name already exists.
-      Category.findOne({ category: req.body.category }).exec(function (err, found_category) {
+      Category.findOne({ category: req.body.category }).exec(function (
+        err,
+        found_category
+      ) {
         if (err) {
           return next(err);
         }
@@ -199,7 +206,7 @@ exports.category_update = [
           // Category exists, redirect to its detail page.
           res.redirect(found_category.url);
         } else {
-          console.log('update successful', req.body)
+          console.log('update successful', req.body);
           Category.findByIdAndUpdate(
             req.params.categoryid,
             category,
@@ -209,7 +216,7 @@ exports.category_update = [
                 return next(err);
               }
               // Category saved. Redirect to category detail page.
-              res.json({message: 'update successful!'});
+              res.json({ message: 'update successful!' });
             }
           );
         }

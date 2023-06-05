@@ -41,11 +41,12 @@ router.get('/', userController.users_login_get);
 //   })(req, res, next);
 // });
 
+//CHANGE THESE ROUTES FOR DEVELOPMENT MODE
 router.post(
   '/',
   passport.authenticate('local', {
-    successRedirect: "https://alex-lvl.github.io/blog-react/",
-    failureRedirect: "https://alex-lvl.github.io/blog-react/"
+    successRedirect: "/",
+    failureRedirect: "/#/login"
   })
 );
 

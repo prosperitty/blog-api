@@ -12,6 +12,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('./models/user');
+const cloudinary = require('cloudinary').v2;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -22,9 +23,20 @@ const signupRouter = require('./routes/signup');
 var compression = require('compression');
 var helmet = require('helmet');
 
-require('dotenv').config();
 var app = express();
 app.use(helmet());
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+// Configure Cloudinary
+cloudinary.config({
+  // secure: true,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
 
 const mongoDB = process.env.MONGODB_URI;
 mongoose.connect(mongoDB, { useUnifiedTopology: true, useNewUrlParser: true });
@@ -40,10 +52,36 @@ db.on('error', console.error.bind(console, 'MONGODB connection error:'));
 // app.set('views', path.join(__dirname, 'views'));
 // app.set('view engine', 'ejs');
 //unknown if this solved the issue with session cookie not being set
-app.set("trust proxy", 1);
+app.set('trust proxy', 1);
 
 //setting origin to exact route may cause problems. request headers dont send exact origin route.
-app.use(cors({ origin: ['https://alex-lvl.github.io', "https://nextjs-blog-one-pi-24.vercel.app/"], credentials: true }));
+let cookie = undefined;
+if (process.env.NODE_ENV !== 'production') {
+  cookie = {
+    //must be set if requesting from backend api
+    // sameSite: 'none',
+    maxAge: 1000 * 60 * 60 * 24, // One day
+    //set to false in dev environment
+    secure: false,
+  };
+  app.use(cors());
+} else {
+  cookie = {
+    //must be set if requesting from backend api
+    sameSite: 'none',
+    maxAge: 1000 * 60 * 60 * 24, // One day
+    secure: true,
+  };
+  app.use(
+    cors({
+      origin: [
+        'https://alex-lvl.github.io',
+        'https://nextjs-blog-one-pi-24.vercel.app/',
+      ],
+      credentials: true,
+    })
+  );
+}
 app.use(cookieParser());
 app.use(
   session({
@@ -51,12 +89,7 @@ app.use(
     secret: process.env.TOKEN_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      //must be set if requesting from backend api
-      sameSite: 'none',
-      maxAge: 1000 * 60 * 60 * 24, // One day
-      secure: true,
-    },
+    cookie: cookie,
   })
 );
 app.use(passport.initialize());
@@ -97,14 +130,14 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
-  console.log('serializing user:', user);
+  // console.log('serializing user:', user);
   done(null, user.id);
 });
 
 passport.deserializeUser(function (id, done) {
-  console.log('deserializing user with id:', id);
+  // console.log('deserializing user with id:', id);
   User.findById(id, function (err, user) {
-    console.log('deserialized user:', user);
+    // console.log('deserialized user:', user);
     done(err, user);
   });
 });

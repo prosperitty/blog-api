@@ -48,7 +48,6 @@ router.get('/', function (req, res, next) {
           category: '63433c0bf956b9ec2934ecdc',
           isPublished: true,
         })
-          .select('-image')
           .sort({ date: -1 })
           .populate('category')
           .exec(callback);
@@ -58,7 +57,6 @@ router.get('/', function (req, res, next) {
           category: '633d2bd499336cb4c9381d17',
           isPublished: true,
         })
-          .select('-image')
           .sort({ date: -1 })
           .populate('category')
           .exec(callback);
@@ -68,7 +66,6 @@ router.get('/', function (req, res, next) {
           category: '63433c35f956b9ec2934ecf8',
           isPublished: true,
         })
-          .select('-image')
           .sort({ date: -1 })
           .populate('category')
           .exec(callback);
@@ -78,7 +75,6 @@ router.get('/', function (req, res, next) {
           category: '63433c39f956b9ec2934ed06',
           isPublished: true,
         })
-          .select('-image')
           .sort({ date: -1 })
           .populate('category')
           .exec(callback);
@@ -88,7 +84,6 @@ router.get('/', function (req, res, next) {
           category: '63433c30f956b9ec2934ecea',
           isPublished: true,
         })
-          .select('-image')
           .sort({ date: -1 })
           .populate('category')
           .exec(callback);
