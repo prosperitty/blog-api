@@ -2,6 +2,8 @@
 
 This is the backend API codebase for the blog app. Technology used includes node.js, express.js, mongoose, multer, passport.js, and MongoDB as a database. Hosting was done by [Railway](https://railway.app). Hosting is now on [Render](https://render.com/).
 
+Frontend client repository [here](https://github.com/alex-lvl/blog-react).
+
 ## Functionality
 
 The main functionality of this blog api is to allow the frontend client to call this API to handle a variety of operations on the server side. This API handles authentication, CRUD operations, database operations, form validation/upload, and RESTful operations.
