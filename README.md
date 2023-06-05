@@ -1,14 +1,14 @@
 # Blog API
 
-This is the backend API codebase for the blog app. Technology used includes node.js, express.js, mongoose, multer, passport.js, and MongoDB as a database. Hosting by [Railway](https://railway.app). 
+This is the backend API codebase for the blog app. Technology used includes node.js, express.js, mongoose, multer, passport.js, and MongoDB as a database. Hosting was done by [Railway](https://railway.app). Hosting is now on [Render](https://render.com/).
 
 ## Functionality
 
-The main functionality of this blog app is to allow users to call this API to create articles, comments, or categories if they are authenticated. Articles and comments use the basic operations of CRUD. Users are only allowed to create categories for now. 
+The main functionality of this blog api is to allow the frontend client to call this API to handle a variety of operations on the server side. This API handles authentication, CRUD operations, database operations, form validation/upload, and RESTful operations.
 
-If a user wants to begin writing blogs, or comment below a blog, the user must first create an account. Once registered, the user should be authenticated with passport.js to begin using the app. Users are allowed to sign out if chosen to.
+Using mongoose and express, the app is able to query, create models, control view, and create routing. Multer is used to help store data such as images which is then used to generate a image URI to be uploaded to cloudinary. 
 
-Using mongoose and express, the app is able to query, create models, control view, and create routing. Multer is used to help store data such as images to MongoDB. 
+The API now utilizes the cloudinary API to store images uploaded by users to the cloud. Previously, the app used Multer to help store data to MongoDB and then used to generate the image on the front end client. However, the stored buffer was very large for such operations and slowed performance significantly. Therefore, cloudinary is utilized to host images on the cloud for a significant increase in performance.
 
 # Learning Objectives
 
@@ -31,7 +31,8 @@ Using mongoose and express, the app is able to query, create models, control vie
 - Configuring CORS origin
 - CORS Headers
 - Frontend Development/Backend Development
-- Railway
+- Railway/Render
+- Cloudinary
 
 ## References
 
