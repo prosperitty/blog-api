@@ -75,7 +75,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(
     cors({
       origin: [
-        'https://alex-lvl.github.io',
+        'https://prosperitty.github.io',
         'https://nextjs-blog-one-pi-24.vercel.app/',
       ],
       credentials: true,
