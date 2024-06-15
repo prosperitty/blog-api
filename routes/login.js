@@ -7,21 +7,20 @@ router.get('/', userController.users_login_get);
 
 if (process.env.NODE_ENV !== 'production') {
   router.post(
-    '/', 
+    '/',
     passport.authenticate('local', {
-      successRedirect: "/",
-      failureRedirect: "/#/login"
+      successRedirect: '/',
+      failureRedirect: '/#/login',
     })
   );
 } else {
   router.post(
-    '/', 
+    '/',
     passport.authenticate('local', {
-      successRedirect: "https://alex-lvl.github.io/blog-react/",
-      failureRedirect: "https://alex-lvl.github.io/blog-react/login"
+      successRedirect: 'https://prosperitty.github.io/blog-react/',
+      failureRedirect: 'https://prosperitty.github.io/blog-react/login',
     })
   );
 }
-
 
 module.exports = router;
