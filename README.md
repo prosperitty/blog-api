@@ -2,7 +2,7 @@
 
 This is the backend API codebase for the blog app. Technology used includes node.js, express.js, mongoose, multer, passport.js, and MongoDB as a database. Hosting was done by [Railway](https://railway.app). Hosting is now on [Render](https://render.com/).
 
-Frontend client repository [here](https://github.com/alex-lvl/blog-react).
+Frontend client repository [here](https://github.com/prosperitty/blog-react).
 
 ## Functionality
 
